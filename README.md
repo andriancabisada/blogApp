@@ -17,3 +17,7 @@ To serve in the browser
 ```sh
 $ npm start
 ```
+
+### Testing
+
+Test files are located in the postman folder

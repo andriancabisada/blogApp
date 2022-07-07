@@ -1,5 +1,19 @@
 # blogApp
 
-## npm install
+Blog API Endpoints with Image Upload
 
-## npm start
+### Installation
+
+Install the dependencies
+
+```sh
+$ npm install
+```
+
+### Serve
+
+To serve in the browser
+
+```sh
+$ npm start
+```

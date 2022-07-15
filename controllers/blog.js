@@ -44,57 +44,35 @@ const getBlog = async (req, res) => {
   }
 };
 
-const updateTask = async (req, res) => {
-  const id = req.params.id;
-  const task = await taskDb.findById(id);
-  task.name = req.body.name;
-  task.description = req.body.description;
-  task.status = req.body.status;
-  await task
-    .save(task)
-    .then((data) => {
-      res.json(task);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "Some error occurred while updating",
-      });
-    });
-};
-
 const deleteBlog = async (req, res) => {
-  const blogId = req.params.blogId;
-  await blogDb
-    .findByIdAndDelete(blogId)
-    .then((data) => {
-      if (!data) {
-        res.send({
-          message: `Cannot Delete with id ${blogId}. Maybe something is wrong`,
-        });
-      } else {
-        res.send({ message: "Successfully deleted" });
-      }
-    })
-    .catch((err) => {
-      res.status(500).send({ message: "Could not delete blog id " + blogId });
-    });
+  const blog = await blogDb.findById(req.params.id);
+  if (!blog) {
+    res.status(400);
+    throw new Error("Blog not found");
+  }
+
+  await blog.remove(req.params.id);
+
+  res.status(200).json("Delete Successfull");
 };
 
 const updateBlog = async (req, res) => {
-  const blogId = req.params.blogId;
-  const blog = await blogDb.findById(blogId);
-  blog.title = req.body.title;
-  blog.content = req.body.content;
-  await blog
-    .save(blog)
-    .then((data) => {
-      res.json(blog);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "Some error occurred while updating",
-      });
-    });
+  const blog = await blogDb.findById(req.params.blogId);
+
+  if (!blog) {
+    res.status(400);
+    throw new Error("Blog not found");
+  }
+
+  const updatedBlog = await blogDb.findByIdAndUpdate(
+    req.params.blogId,
+    req.body,
+    {
+      new: true,
+    }
+  );
+
+  res.status(200).json(updatedBlog);
 };
 
 module.exports = {

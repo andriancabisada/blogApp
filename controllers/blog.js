@@ -1,7 +1,8 @@
 const blogDb = require("../models/blog");
+const asyncHandler = require("express-async-handler");
 const { v4: uuidv4 } = require("uuid");
 
-const createBlog = async (req, res) => {
+const createBlog = asyncHandler(async (req, res) => {
   if (!req.body) res.status(400).send({ message: "Content cannot be empty" });
 
   const blog = new blogDb({
@@ -24,27 +25,27 @@ const createBlog = async (req, res) => {
           "Some error occurred while creating a create operation",
       });
     });
-};
+});
 
-const getBlogs = async (req, res) => {
+const getBlogs = asyncHandler(async (req, res) => {
   try {
     const blog = await blogDb.find();
     res.json(blog);
   } catch (err) {
     res.send("Error " + err);
   }
-};
+});
 
-const getBlog = async (req, res) => {
+const getBlog = asyncHandler(async (req, res) => {
   try {
     const blog = await blogDb.findById(req.params.blogId);
     res.json(blog);
   } catch (error) {
     res.send("Error " + error);
   }
-};
+});
 
-const deleteBlog = async (req, res) => {
+const deleteBlog = asyncHandler(async (req, res) => {
   const blog = await blogDb.findById(req.params.id);
   if (!blog) {
     res.status(400);
@@ -54,9 +55,9 @@ const deleteBlog = async (req, res) => {
   await blog.remove(req.params.id);
 
   res.status(200).json("Delete Successfull");
-};
+});
 
-const updateBlog = async (req, res) => {
+const updateBlog = asyncHandler(async (req, res) => {
   const blog = await blogDb.findById(req.params.blogId);
 
   if (!blog) {
@@ -73,7 +74,7 @@ const updateBlog = async (req, res) => {
   );
 
   res.status(200).json(updatedBlog);
-};
+});
 
 module.exports = {
   getBlogs,

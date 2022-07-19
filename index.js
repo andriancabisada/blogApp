@@ -1,10 +1,11 @@
 const express = require("express");
 const bodyparser = require("body-parser");
-
+const { errorHandler } = require("./middleware/errorMiddleware");
 const morgan = require("morgan");
 const connectDB = require("./database/config");
 const blogRoutes = require("./routes/blog");
 const uploadRoutes = require("./routes/upload");
+const userRoutes = require("./routes/user");
 
 const app = express();
 
@@ -29,6 +30,9 @@ app.get("/", (req, res) => res.render("upload"));
 app.use(express.json());
 app.use("/blog", blogRoutes);
 app.use("/upload", uploadRoutes);
+app.use("/users", userRoutes);
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {

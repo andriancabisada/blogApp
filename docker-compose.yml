@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  blogApp-db:
+    image: mongo:5.0.2
+    restart: blogApp-db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: sa
+      MONGO_INITDB_ROOT_PASSWORD: password311
+    ports:
+      - "27017"
+    volumes:
+      - mongo-db:/data/db
+  
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: /backend
+    container_name: backend
+    networks:
+      - private-network
+      - app-network
+    depends_on:
+      - blogApp-db
+
+  volumes:
+  mongo-db:
+    name: 'mongo-db'
+
+networks:
+  app-network:
+    name: app-network
+  private-network:
+    name: private-network

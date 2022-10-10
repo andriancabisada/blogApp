@@ -3,7 +3,7 @@ version: '3'
 services:
   blogApp-db:
     image: mongo:5.0.2
-    restart: blogApp-db
+    restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: sa
       MONGO_INITDB_ROOT_PASSWORD: password311
@@ -18,14 +18,16 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    image: /backend
+    image: andre/backend
     container_name: backend
     networks:
       - private-network
       - app-network
     depends_on:
       - blogApp-db
-
+    ports:
+      - 8080:8080
+      
 volumes:
   mongo-db:
     name: 'mongo-db'

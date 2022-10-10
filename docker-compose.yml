@@ -26,9 +26,9 @@ services:
     depends_on:
       - blogApp-db
 
-  volumes:
-    mongo-db:
-      name: 'mongo-db'
+volumes:
+  mongo-db:
+    name: 'mongo-db'
 
 networks:
   app-network:

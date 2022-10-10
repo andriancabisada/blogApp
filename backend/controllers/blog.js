@@ -1,8 +1,7 @@
 const blogDb = require("../models/blog");
 const asyncHandler = require("express-async-handler");
-
-const redis = require("redis");
 const { v4: uuidv4 } = require("uuid");
+const redis = require("redis");
 
 const redisPort = 6379;
 const client = redis.createClient(redisPort);
@@ -16,7 +15,7 @@ const createBlog = asyncHandler(async (req, res) => {
 
   const blog = new blogDb({
     blogId: uuidv4(),
-    title: req.body.title,
+    title: req.body.title(),
     content: req.body.content,
     authorId: req.body.authorId,
     authorName: req.body.authorName,

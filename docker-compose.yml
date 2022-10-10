@@ -11,6 +11,8 @@ services:
       - "27017"
     volumes:
       - mongo-db:/data/db
+    networks:
+      - private-network
   
   backend:
     build:
@@ -25,8 +27,8 @@ services:
       - blogApp-db
 
   volumes:
-  mongo-db:
-    name: 'mongo-db'
+    mongo-db:
+      name: 'mongo-db'
 
 networks:
   app-network:

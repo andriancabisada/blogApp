@@ -1,7 +1,8 @@
 const blogDb = require("../models/blog");
-const asyncHandler = require("express-async-handler");
+
 const { v4: uuidv4 } = require("uuid");
 const redis = require("redis");
+const { protect } = require("../middleware/authMiddleware");
 
 const redisPort = 6379;
 const client = redis.createClient(redisPort);
@@ -10,7 +11,7 @@ client.on("error", (err) => {
   console.log(err);
 });
 
-const createBlog = asyncHandler(async (req, res) => {
+const createBlog = protect(async (req, res) => {
   if (!req.body) res.status(400).send({ message: "Content cannot be empty" });
 
   const blog = new blogDb({
@@ -35,7 +36,7 @@ const createBlog = asyncHandler(async (req, res) => {
     });
 });
 
-const getBlogs = asyncHandler(async (req, res) => {
+const getBlogs = protect(async (req, res) => {
   try {
     const blog = await blogDb.find();
     res.json(blog);
@@ -44,7 +45,7 @@ const getBlogs = asyncHandler(async (req, res) => {
   }
 });
 
-const getBlog = asyncHandler(async (req, res) => {
+const getBlog = protect(async (req, res) => {
   try {
     client.get(req.params.blogId, async (err, blog) => {
       if (blog) {
@@ -59,7 +60,7 @@ const getBlog = asyncHandler(async (req, res) => {
   }
 });
 
-const deleteBlog = asyncHandler(async (req, res) => {
+const deleteBlog = protect(async (req, res) => {
   const blog = await blogDb.findById(req.params.id);
   if (!blog) {
     res.status(400);
@@ -71,7 +72,7 @@ const deleteBlog = asyncHandler(async (req, res) => {
   res.status(200).json("Delete Successfull");
 });
 
-const updateBlog = asyncHandler(async (req, res) => {
+const updateBlog = protect(async (req, res) => {
   const blog = await blogDb.findById(req.params.blogId);
 
   if (!blog) {

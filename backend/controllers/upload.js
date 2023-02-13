@@ -1,5 +1,6 @@
 const multer = require("multer");
 const path = require("path");
+const { protect } = require("../middleware/authMiddleware");
 
 const storage = multer.diskStorage({
   destination: "./uploads/",
@@ -40,7 +41,7 @@ const upload = async (req, res) => {
   res.render("upload");
 };
 
-const uploaded = async (req, res) => {
+const uploaded = protect(async (req, res) => {
   uploader(req, res, (err) => {
     if (err) {
       res.render("upload", {
@@ -59,7 +60,7 @@ const uploaded = async (req, res) => {
       }
     }
   });
-};
+});
 
 module.exports = {
   upload,

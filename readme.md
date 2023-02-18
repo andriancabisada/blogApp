@@ -1,21 +1,9 @@
 # blogApp with docker
 
-### Installation
+### Docker
 
-Install the dependencies
+To run docker instance
 
 ```sh
 $ docker compose up
 ```
-
-### Serve
-
-To serve in the browser
-
-```sh
-$ npm start
-```
-
-### Testing
-
-Test files are located in the postman folder

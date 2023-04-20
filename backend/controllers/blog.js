@@ -1,8 +1,7 @@
 const blogDb = require("../models/blog");
-
+const protect = require("../middleware/authMiddleware");
 const { v4: uuidv4 } = require("uuid");
 const redis = require("redis");
-const { protect } = require("../middleware/authMiddleware");
 
 const redisPort = 6379;
 const client = redis.createClient(redisPort);
@@ -11,7 +10,7 @@ client.on("error", (err) => {
   console.log(err);
 });
 
-const createBlog = protect(async (req, res) => {
+const createBlog = async (req, res) => {
   if (!req.body) res.status(400).send({ message: "Content cannot be empty" });
 
   const blog = new blogDb({
@@ -34,7 +33,7 @@ const createBlog = protect(async (req, res) => {
           "Some error occurred while creating a create operation",
       });
     });
-});
+};
 
 const getBlogs = protect(async (req, res) => {
   try {

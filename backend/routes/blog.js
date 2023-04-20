@@ -9,15 +9,16 @@ const {
 } = require("../controllers/blog");
 
 const router = express.Router();
+const { protect } = require("../middleware/authMiddleware");
 
-router.get("/", getBlogs);
+router.get("/", protect, getBlogs);
 
-router.get("/:id", getBlog);
+router.get("/:id", protect, getBlog);
 
-router.post("/", createBlog);
+router.post("/", protect, createBlog);
 
-router.delete("/:id", deleteBlog);
+router.delete("/:id", protect, deleteBlog);
 
-router.patch("/:id", updateBlog);
+router.patch("/:id", protect, updateBlog);
 
 module.exports = router;

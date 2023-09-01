@@ -2,17 +2,28 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const asyncHandler = require("express-async-handler");
 const User = require("../models/user");
-
+const validator = require("validator");
 // @desc    Register new user
 // @route   POST /api/users
 // @access  Public
-const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password } = req.body;
 
+const registerUser = asyncHandler(async (req, res) => {
+  const allowedURL = "http://localhost:8080/";
+  const { name, email, password } = req.body;
+  const url = req.query.url;
+
+  if (!allowedURL.includes(url))
+    return res.status(400).json({ message: "Bad URL" });
   if (!name || !email || !password) {
-    res.status(400);
-    throw new Error("Please add all fields");
+    return res.status(400).json({ message: "Please add all fields" });
   }
+
+  if (!validator.isEmail(email) || !typeof req.body.email !== "string")
+    return res.status(400).json({ message: "Invalid Email" });
+  if (typeof req.body.name !== "string")
+    return res.status(400).json({ message: "Invalid name" });
+  if (typeof req.body.password !== "string")
+    return res.status(400).json({ message: "Invalid password" });
 
   // Check if user exists
   const userExists = await User.findOne({ email });
@@ -82,8 +93,17 @@ const generateToken = (id) => {
   });
 };
 
+const getUser = async (req, res) => {
+  try {
+    const user = await User.find();
+    res.json(user);
+  } catch (err) {
+    res.send("Error " + err);
+  }
+};
 module.exports = {
   registerUser,
   loginUser,
   getMe,
+  getUser,
 };

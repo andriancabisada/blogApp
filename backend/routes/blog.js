@@ -11,11 +11,11 @@ const {
 const router = express.Router();
 const { protect } = require("../middleware/authMiddleware");
 
-router.get("/", protect, getBlogs);
+router.get("/", getBlogs);
 
 router.get("/:id", protect, getBlog);
 
-router.post("/", protect, createBlog);
+router.post("/", createBlog);
 
 router.delete("/:id", protect, deleteBlog);
 
